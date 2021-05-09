@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, AffinityPropagation
 plt.style.use('seaborn-whitegrid')
 
 
@@ -60,8 +60,6 @@ def kmeans(data, amount_clusters):
     labels: numpy array
         array that assigns each datapoint to a cluster"""
 
-    print(data)
-
     # Fit data to kmeans model class
     kmeans = KMeans(n_clusters=amount_clusters, random_state=0).fit(data)
 
@@ -71,6 +69,17 @@ def kmeans(data, amount_clusters):
 
     #return back to API
     return centers, labels
+
+
+def affinity(data):
+    afprop = AffinityPropagation(random_state=5).fit(data)
+    centers = afprop.cluster_centers_
+
+    # predict clusters for data
+    P = afprop.predict(data)
+
+    # return back to API
+    return centers, P
 
 
 
@@ -115,11 +124,15 @@ def centralAPI(algorithm, datapath, amount_clusters):
     if algorithm == "kmeans":
         data = preprocess_example_data(datapath)
         centers, labels = kmeans(data, amount_clusters= amount_clusters)
+    elif algorithm == "Affinity Propagation":
+        data = preprocess_example_data(datapath)
+        centers, labels = affinity(data)
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass
 
 
+    # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     # Plot the data
     plotting(data, centers, labels)
 
@@ -133,8 +146,11 @@ def centralAPI(algorithm, datapath, amount_clusters):
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
 #  unser Webinterface
 
-algorithm = "kmeans"
-datapath = "./example_data.txt"
+"""Die algorithmen hier unten funktionieren bereits"""
+
+# algorithm = "kmeans"
+algorithm = "Affinity Propagation"
+datapath = "./example_data.txt"  # from machine learning 2
 clusters = 5
 
 centralAPI(algorithm = algorithm, datapath = datapath, amount_clusters=clusters)

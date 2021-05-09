@@ -72,6 +72,21 @@ def kmeans(data, amount_clusters):
 
 
 def affinity(data):
+    """Affinity Propagation implementation. This one does not require the amount of clusters
+
+    Parameters
+    ______
+    data: numpy array
+        array of datapoints
+
+    Return
+    ______
+    centers: numpy array
+        cluster centers
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+
+    # Initiate AfProp
     afprop = AffinityPropagation(random_state=5).fit(data)
     centers = afprop.cluster_centers_
 

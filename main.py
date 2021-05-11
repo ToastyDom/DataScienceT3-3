@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans, AffinityPropagation
+from sklearn.datasets import load_iris
 plt.style.use('seaborn-whitegrid')
 
 
@@ -40,7 +41,6 @@ def preprocess_example_data(path):
     return data
 
 
-
 # Clustering Functions
 def kmeans(data, amount_clusters):
 
@@ -67,7 +67,7 @@ def kmeans(data, amount_clusters):
     centers = kmeans.cluster_centers_
     labels = kmeans.labels_
 
-    #return back to API
+    # return back to API
     return centers, labels
 
 
@@ -91,13 +91,10 @@ def affinity(data):
     centers = afprop.cluster_centers_
 
     # predict clusters for data
-    P = afprop.predict(data)
+    labels = afprop.predict(data)
 
     # return back to API
-    return centers, P
-
-
-
+    return centers, labels
 
 
 # Main functions:
@@ -121,8 +118,7 @@ def plotting(data, centers, labels):
     plt.show()
 
 
-
-def centralAPI(algorithm, datapath, amount_clusters):
+def centralAPI(algorithm, dataset, amount_clusters):
 
     """Central API that controls which algorithm we want to use and how we wish to configure them
 
@@ -130,32 +126,33 @@ def centralAPI(algorithm, datapath, amount_clusters):
     ______
     algorithm: str
         name of the cluster algorithm
-    datapath: str
-        path to the dataset
+    dataset: str
+        name of dataset
     kwargs: xxx
         arguments that might depend on the clustering algorithm"""
 
+    # Select and load dataset
+    if dataset == "example":
+        datapath = "./example_data.txt"
+        data = preprocess_example_data(datapath)
+    elif dataset == "iris":
+        data = load_iris()["data"]
+    else:
+        # TODO: Add new datasets and connect them elif statements
+        pass
 
+    # Select Algorithm
     if algorithm == "kmeans":
-        data = preprocess_example_data(datapath)
-        centers, labels = kmeans(data, amount_clusters= amount_clusters)
+        centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
-        data = preprocess_example_data(datapath)
         centers, labels = affinity(data)
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass
 
-
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     # Plot the data
     plotting(data, centers, labels)
-
-
-
-
-
-
 
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
@@ -163,9 +160,12 @@ def centralAPI(algorithm, datapath, amount_clusters):
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-# algorithm = "kmeans"
-algorithm = "Affinity Propagation"
-datapath = "./example_data.txt"  # from machine learning 2
+# Choose from "kmeans", "Affinity Propagation"
+algorithm = "kmeans"
+
+# Choose from "example", "iris"
+dataset = "iris"  # from machine learning 2
 clusters = 5
 
-centralAPI(algorithm = algorithm, datapath = datapath, amount_clusters=clusters)
+
+centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)

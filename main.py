@@ -160,6 +160,18 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # Plot the data
     plotting(data, centers, labels)
 
+def purity(algorithm, dataset):
+    """"Central function that calculates the external validation factor, done with "Purity"
+
+    Parameters
+    ______
+    algorithm: str
+        name of clustering algorithm
+    dataset: str
+        name of dataset
+    """
+    data, labels = load_digits(return_X_y=True)
+    print(labels, len(labels))
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
 #  unser Webinterface
@@ -178,3 +190,4 @@ clusters = 5
 
 # centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
 centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=clusters)
+purity("kmeans", "")

@@ -141,9 +141,11 @@ def centralAPI(algorithm, dataset, amount_clusters):
         data = load_iris()["data"]
     elif dataset == "digits":
         digits = load_digits()
-        # reduce dimensionality to make appropraite plots
-        pca = PCA(n_components=2)
-        data = pca.fit_transform(digits.data)
+        data = digits.data
+        target_label = digits.target
+        # reduce dimensionality to make appropraite plots - if wanted
+        # pca = PCA(n_components=2)
+        # data = pca.fit_transform(digits.data)
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
@@ -159,7 +161,13 @@ def centralAPI(algorithm, dataset, amount_clusters):
 
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     # Plot the data
+
+    # PCS after kmeans leads to higher purity
+    pca = PCA(n_components=2)
+    data = pca.fit_transform(digits.data)
+    # One plot with calculated labels and one with true labels to compare
     plotting(data, centers, labels)
+    plotting(data, centers, target_label)
 
 def purity(algorithm, dataset):
     """"Central function that calculates the external validation factor, done with "Purity"
@@ -173,8 +181,9 @@ def purity(algorithm, dataset):
     """
     # We need to run another round of PCA should be handled through return of centralAPI 
     data, labels = load_digits(return_X_y=True)
-    pca = PCA(n_components=2)
-    data = pca.fit_transform(data)
+    # Purity without PCA yields to better results
+    # pca = PCA(n_components=2)
+    # data = pca.fit_transform(data)
     _, predicted = kmeans(data, 10)
 
     # Calculate confusion Matrix which shows which points are in each cluster 

@@ -1,10 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans, AffinityPropagation
-from sklearn.datasets import load_iris, load_digits, load_wine
+from sklearn.cluster import KMeans, AffinityPropagation, Birch
+from sklearn.datasets import load_iris, load_digits, load_breast_cancer, load_wine
 from sklearn.decomposition import PCA
-from sklearn.metrics import confusion_matrix
-from sklearn.mixture import GaussianMixture
+
 plt.style.use('seaborn-whitegrid')
 
 
@@ -99,6 +98,7 @@ def affinity(data):
     # return back to API
     return centers, labels
 
+
 def gaussian_mixture_model(data, amount_clusters):
     """ Gaussian mixture model implementation. Requires the amount of clusters.
 
@@ -106,6 +106,7 @@ def gaussian_mixture_model(data, amount_clusters):
     ______
     data: numpy array
         array of datapoints
+
 
     Return
     ______
@@ -121,6 +122,31 @@ def gaussian_mixture_model(data, amount_clusters):
     labels = gmm.predict(data)
 
     return gmm, labels
+
+  
+  
+  
+def birch(data, amount_clusters):
+    """Birch implementation. 
+    amount_clusters: int
+        number of clusters we want to create
+
+    Return
+    ______
+    centers: numpy array
+        cluster centers
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+        
+    # Initiate BIRCH
+    birch_fit = Birch(threshold=0.01, n_clusters=amount_clusters).fit(data)
+    centers = birch_fit.subcluster_centers_
+    
+    # predict clusters for data
+    labels = birch_fit.predict(data)
+    
+    return centers, labels
+
 
 
 def plotting(data, centers, labels):
@@ -160,8 +186,11 @@ def centralAPI(algorithm, dataset, amount_clusters):
     if dataset == "example":
         datapath = "./example_data.txt"
         data = preprocess_example_data(datapath)
-    elif dataset == "iris":
+    elif dataset == "IRIS":
         data = load_iris()["data"]
+
+    elif dataset == "breast_cancer":
+        data = load_breast_cancer()["data"]
     elif dataset == "digits":
         digits = load_digits()
         # reduce dimensionality to make appropraite plots
@@ -174,12 +203,17 @@ def centralAPI(algorithm, dataset, amount_clusters):
         pass
 
     # Select Algorithm
-    if algorithm == "kmeans":
+    if algorithm == "K-Means":
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
+
     elif algorithm == "Gaussian mixture model":
         gmm, labels = gaussian_mixture_model(data, amount_clusters=amount_clusters)
+
+    elif algorithm == "BIRCH":
+        centers, labels = birch(data, amount_clusters=amount_clusters)
+
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass
@@ -187,58 +221,26 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     # Plot the data
     plotting(data, centers, labels)
+    return data, centers, labels
 
-def purity(algorithm, dataset):
-    """"Central function that calculates the external validation factor, done with "Purity"
-
-    Parameters
-    ______
-    algorithm: str
-        name of clustering algorithm
-    dataset: str
-        name of dataset
-    """
-    # We need to run another round of PCA should be handled through return of centralAPI 
-    data, labels = load_digits(return_X_y=True)
-    pca = PCA(n_components=2)
-    data = pca.fit_transform(data)
-    _, predicted = kmeans(data, 10)
-
-    # Calculate confusion Matrix which shows which points are in each cluster 
-    # (predicted and should be)
-    mat = confusion_matrix(labels, predicted)
-
-    # normalizing over all clusters, therefore we do not need to multiply with 1/N
-    # mat_norm is a matrix with i-th row = true label and j-th column = predicted label
-    mat_norm = confusion_matrix(labels, predicted, normalize='all')
-
-    # Calculate which predicted label matches to the true label
-    # e.g. predicted label 1 is true label 9 if [_,9,_,...]
-    mapping = np.array([np.argmax(mat[:,i]) for i in range(10)])
-    mapping_norm = np.array([np.argmax(mat_norm[:,i]) for i in range(10)])
-    
-    # Calculate Purity 
-    purity_value = 0
-    for i in range(10):
-        # mapping_norm[i] gives true label and i gives what was predicted
-        purity_value += mat_norm[mapping_norm[i],i]
-    print("Purity is: ", purity_value)
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
 #  unser Webinterface
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-# Choose from "kmeans", "Affinity Propagation"
-algorithm = "kmeans"
 
-# Choose from "example", "iris"
+# Choose from "kmeans", "Affinity Propagation", "BIRCH"
+algorithm = "BIRCH"
+
+# Choose from "example", "iris", beast_cancer
 dataset = "iris"  # from machine learning 2
 dataset_2 = "digits"
+
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte
 
 # centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
-centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=10)
-purity("kmeans", "")
+
+centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=clusters)

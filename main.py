@@ -202,8 +202,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
         data_obj = load_wine()
 
     else:
-        # TODO: Add new datasets and connect them elif statements
-        pass
+        print("Invalid input!")
+        return
 
     data = data_obj.data
     target_labels = data_obj.target
@@ -221,8 +221,9 @@ def centralAPI(algorithm, dataset, amount_clusters):
         centers, labels = birch(data, amount_clusters=amount_clusters)
 
     else:
-        # TODO: Add new algorithms and connect them with elif-statements
-        pass
+        print("Invalid Input!")
+        return
+
 
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     

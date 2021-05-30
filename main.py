@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans, AffinityPropagation, Birch
 from sklearn.datasets import load_iris, load_digits, load_breast_cancer, load_wine
 from sklearn.mixture import GaussianMixture
+from sklearn.metrics import confusion_matrix
 from sklearn.decomposition import PCA
 
 plt.style.use('seaborn-whitegrid')

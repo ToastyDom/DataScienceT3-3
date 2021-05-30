@@ -164,7 +164,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     if dataset == "example":
         datapath = "./example_data.txt"
         data = preprocess_example_data(datapath)
-    elif dataset == "iris":
+    elif dataset == "IRIS":
         data = load_iris()["data"]
 
     elif dataset == "breast_cancer":
@@ -179,7 +179,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
         pass
 
     # Select Algorithm
-    if algorithm == "kmeans":
+    if algorithm == "K-Means":
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
@@ -193,11 +193,14 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # Plot the data
     plotting(data, centers, labels)
 
+    return data, centers, labels
+
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
 #  unser Webinterface
 
 """Die algorithmen hier unten funktionieren bereits"""
+
 
 # Choose from "kmeans", "Affinity Propagation", "BIRCH"
 algorithm = "BIRCH"
@@ -205,6 +208,7 @@ algorithm = "BIRCH"
 # Choose from "example", "iris", beast_cancer
 dataset = "iris"  # from machine learning 2
 dataset_2 = "digits"
+
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte

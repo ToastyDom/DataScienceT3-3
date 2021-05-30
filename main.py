@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans, AffinityPropagation
-from sklearn.datasets import load_iris
+
+from sklearn.cluster import KMeans, AffinityPropagation, Birch
+from sklearn.datasets import load_iris, load_digits, load_breast_cancer
+from sklearn.decomposition import PCA
+
 plt.style.use('seaborn-whitegrid')
 
 
@@ -96,6 +99,32 @@ def affinity(data):
     # return back to API
     return centers, labels
 
+def birch(data, amount_clusters):
+    """Birch implementation. 
+
+    Parameters
+    ______
+    data: numpy array
+        array of datapoints
+    amount_clusters: int
+        number of clusters we want to create
+
+    Return
+    ______
+    centers: numpy array
+        cluster centers
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+        
+    # Initiate BIRCH
+    birch_fit = Birch(threshold=0.01, n_clusters=amount_clusters).fit(data)
+    centers = birch_fit.subcluster_centers_
+    
+    # predict clusters for data
+    labels = birch_fit.predict(data)
+    
+    return centers, labels
+
 
 # Main functions:
 def plotting(data, centers, labels):
@@ -137,6 +166,14 @@ def centralAPI(algorithm, dataset, amount_clusters):
         data = preprocess_example_data(datapath)
     elif dataset == "IRIS":
         data = load_iris()["data"]
+
+    elif dataset == "breast_cancer":
+        data = load_breast_cancer()["data"]
+    elif dataset == "digits":
+        digits = load_digits()
+        # reduce dimensionality to make appropraite plots
+        pca = PCA(n_components=2)
+        data = pca.fit_transform(digits.data)
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
@@ -146,6 +183,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
+    elif algorithm == "BIRCH":
+        centers, labels = birch(data, amount_clusters=amount_clusters)
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass
@@ -162,12 +201,18 @@ def centralAPI(algorithm, dataset, amount_clusters):
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-# Choose from "kmeans", "Affinity Propagation"
-algorithm = "K-Means"
 
-# Choose from "example", "iris"
-dataset = "IRIS"  # from machine learning 2
+# Choose from "kmeans", "Affinity Propagation", "BIRCH"
+algorithm = "BIRCH"
+
+# Choose from "example", "iris", beast_cancer
+dataset = "iris"  # from machine learning 2
+dataset_2 = "digits"
+
 clusters = 5
 
+# Auskommentieren, was man nicht ausführen möchte
 
-centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
+# centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
+centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=clusters)
+

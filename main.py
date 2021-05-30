@@ -171,7 +171,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     data = pca.fit_transform(digits.data)
     # One plot with calculated labels and one with true labels to compare
     plotting(data, centers, labels)
-    plotting(data, centers, target_label)
+    plotting(data, centers, target_labels)
     
 
 def purity(labels, targets):

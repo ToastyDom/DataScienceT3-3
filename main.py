@@ -139,10 +139,11 @@ def centralAPI(algorithm, dataset, amount_clusters):
         data = preprocess_example_data(datapath)
     elif dataset == "iris":
         data = load_iris()["data"]
+        target_labels = load_iris().targets
     elif dataset == "digits":
         digits = load_digits()
         data = digits.data
-        target_label = digits.target
+        target_labels = digits.target
         # reduce dimensionality to make appropraite plots - if wanted
         # pca = PCA(n_components=2)
         # data = pca.fit_transform(digits.data)
@@ -162,7 +163,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     
     # Calculate purity before plotting 
-    purity(data, target_label, amount_clusters)
+    purity(labels, target_labels)
 
     # Plot the data
     # PCS after kmeans leads to higher purity
@@ -173,7 +174,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     plotting(data, centers, target_label)
     
 
-def purity(data, labels, amount):
+def purity(labels, targets):
     """"Central function that calculates the external validation factor, done with "Purity"
 
     Parameters
@@ -190,15 +191,16 @@ def purity(data, labels, amount):
     # Purity without PCA yields to better results
     # pca = PCA(n_components=2)
     # data = pca.fit_transform(data)
-    _, predicted = kmeans(data, amount)
+    amount = len(set(labels))
+    #_, predicted = kmeans(data, amount)
 
     # Calculate confusion Matrix which shows which points are in each cluster 
     # (predicted and should be)
-    mat = confusion_matrix(labels, predicted)
+    mat = confusion_matrix(targets, labels)
 
     # normalizing over all clusters, therefore we do not need to multiply with 1/N
     # mat_norm is a matrix with i-th row = true label and j-th column = predicted label
-    mat_norm = confusion_matrix(labels, predicted, normalize='all')
+    mat_norm = confusion_matrix(targets, labels, normalize='all')
 
     # Calculate which predicted label matches to the true label
     # e.g. predicted label 1 is true label 9 if [_,9,_,...]

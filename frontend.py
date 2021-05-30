@@ -4,6 +4,7 @@
 
 import streamlit as st
 from main import centralAPI
+import matplotlib.pyplot as plt
 
 # Setup
 st.title('Evalation of Clustering-Algorithms')
@@ -60,11 +61,19 @@ st.write('Evaluation:', sel_evaluaton)
 # Pressed button returns "True"
 if st.button('Evaluate'):
     if cluster_amount:
-        result = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
+        data, centers, labels = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
     else:
-        result = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
+        data, centers, labels = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
 
     # Todo: Vielleicht sollten wir bei der central API als return die plots haben damit die hier direkt
     # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
     st.write('Computing...')
-    st.write(result)
+    
+    # Need Figure for st.pyplot
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], c=labels,
+                s=50, cmap='prism')
+    ax.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
+    st.pyplot(fig)
+    
+

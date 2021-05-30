@@ -154,7 +154,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # Plot the data
     plotting(data, centers, labels)
 
-    return "Success"
+    return data, centers, labels
 
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später

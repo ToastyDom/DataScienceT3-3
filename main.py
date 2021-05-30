@@ -297,5 +297,5 @@ clusters = 5
 
 # centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
 
-centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=10)
+centralAPI(algorithm="K-Means", dataset=dataset_2, amount_clusters=10)
 # purity("kmeans", "")

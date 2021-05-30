@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans, AffinityPropagation
-from sklearn.datasets import load_iris, load_digits
+from sklearn.datasets import load_iris, load_digits, load_wine
 from sklearn.decomposition import PCA
 from sklearn.metrics import confusion_matrix
+from sklearn.mixture import GaussianMixture
 plt.style.use('seaborn-whitegrid')
 
 
@@ -63,7 +64,7 @@ def kmeans(data, amount_clusters):
         array that assigns each datapoint to a cluster"""
 
     # Fit data to kmeans model class
-    kmeans = KMeans(n_clusters=amount_clusters, random_state=0).fit(data)
+    kmeans = KMeans(amount_clusters=amount_clusters, random_state=0).fit(data)
 
     # retrieve cluster centers and class labels to data
     centers = kmeans.cluster_centers_
@@ -98,8 +99,30 @@ def affinity(data):
     # return back to API
     return centers, labels
 
+def gaussian_mixture_model(data, amount_clusters):
+    """ Gaussian mixture model implementation. Requires the amount of clusters.
 
-# Main functions:
+    Parameters
+    ______
+    data: numpy array
+        array of datapoints
+
+    Return
+    ______
+    gmm: gaussian mixture object
+        contains information about gaussian distributions in dataset
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+
+    # Create gaussian mixture model
+    gmm = GaussianMixture(n_components=amount_clusters).fit(data)
+
+    # predict clusters for data
+    labels = gmm.predict(data)
+
+    return gmm, labels
+
+
 def plotting(data, centers, labels):
 
     """Central plotting function that takes in all the relevant data to plot something
@@ -144,6 +167,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
         # reduce dimensionality to make appropraite plots
         pca = PCA(n_components=2)
         data = pca.fit_transform(digits.data)
+    elif dataset == "wine":
+        data = load_wine().data
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
@@ -153,6 +178,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
+    elif algorithm == "Gaussian mixture model":
+        gmm, labels = gaussian_mixture_model(data, amount_clusters=amount_clusters)
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass

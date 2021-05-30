@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans, AffinityPropagation
-from sklearn.datasets import load_iris, load_digits
+from sklearn.cluster import KMeans, AffinityPropagation, Birch
+from sklearn.datasets import load_iris, load_digits, load_breast_cancer, load_wine
+from sklearn.mixture import GaussianMixture
 from sklearn.decomposition import PCA
-from sklearn.metrics import confusion_matrix
+
 plt.style.use('seaborn-whitegrid')
 
 
@@ -63,7 +64,7 @@ def kmeans(data, amount_clusters):
         array that assigns each datapoint to a cluster"""
 
     # Fit data to kmeans model class
-    kmeans = KMeans(n_clusters=amount_clusters, random_state=0).fit(data)
+    kmeans = KMeans(amount_clusters=amount_clusters, random_state=0).fit(data)
 
     # retrieve cluster centers and class labels to data
     centers = kmeans.cluster_centers_
@@ -99,7 +100,56 @@ def affinity(data):
     return centers, labels
 
 
-# Main functions:
+def gaussian_mixture_model(data, amount_clusters):
+    """ Gaussian mixture model implementation. Requires the amount of clusters.
+
+    Parameters
+    ______
+    data: numpy array
+        array of datapoints
+
+
+    Return
+    ______
+    gmm: gaussian mixture object
+        contains information about gaussian distributions in dataset
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+
+    # Create gaussian mixture model
+    gmm = GaussianMixture(n_components=amount_clusters).fit(data)
+
+    # predict clusters for data
+    labels = gmm.predict(data)
+
+    return gmm, labels
+
+  
+  
+  
+def birch(data, amount_clusters):
+    """Birch implementation. 
+    amount_clusters: int
+        number of clusters we want to create
+
+    Return
+    ______
+    centers: numpy array
+        cluster centers
+    labels: numpy array
+        array that assigns each datapoint to a cluster"""
+        
+    # Initiate BIRCH
+    birch_fit = Birch(threshold=0.01, n_clusters=amount_clusters).fit(data)
+    centers = birch_fit.subcluster_centers_
+    
+    # predict clusters for data
+    labels = birch_fit.predict(data)
+    
+    return centers, labels
+
+
+
 def plotting(data, centers, labels):
 
     """Central plotting function that takes in all the relevant data to plot something
@@ -137,7 +187,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     if dataset == "example":
         datapath = "./example_data.txt"
         data = preprocess_example_data(datapath)
-    elif dataset == "iris":
+    elif dataset == "IRIS":
         data = load_iris()["data"]
         target_labels = load_iris().targets
     elif dataset == "digits":
@@ -147,15 +197,26 @@ def centralAPI(algorithm, dataset, amount_clusters):
         # reduce dimensionality to make appropraite plots - if wanted
         # pca = PCA(n_components=2)
         # data = pca.fit_transform(digits.data)
+    elif dataset == "breast_cancer":
+        data = load_breast_cancer()["data"]
+    elif dataset == "wine":
+        data = load_wine().data
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
 
     # Select Algorithm
-    if algorithm == "kmeans":
+    if algorithm == "K-Means":
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
+
+    elif algorithm == "Gaussian mixture model":
+        gmm, labels = gaussian_mixture_model(data, amount_clusters=amount_clusters)
+
+    elif algorithm == "BIRCH":
+        centers, labels = birch(data, amount_clusters=amount_clusters)
+
     else:
         # TODO: Add new algorithms and connect them with elif-statements
         pass
@@ -172,6 +233,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # One plot with calculated labels and one with true labels to compare
     plotting(data, centers, labels)
     plotting(data, centers, target_labels)
+  
+    return data, centers, labels
     
 
 def purity(labels, targets):
@@ -219,16 +282,19 @@ def purity(labels, targets):
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-# Choose from "kmeans", "Affinity Propagation"
-algorithm = "kmeans"
 
-# Choose from "example", "iris"
+# Choose from "kmeans", "Affinity Propagation", "BIRCH"
+algorithm = "BIRCH"
+
+# Choose from "example", "iris", beast_cancer
 dataset = "iris"  # from machine learning 2
 dataset_2 = "digits"
+
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte
 
 # centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
+
 centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=10)
 # purity("kmeans", "")

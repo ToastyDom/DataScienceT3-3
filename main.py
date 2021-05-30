@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 from sklearn.cluster import KMeans, AffinityPropagation, Birch
-from sklearn.datasets import load_iris
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_iris, load_digits, load_breast_cancer
+from sklearn.decomposition import PCA
+
 plt.style.use('seaborn-whitegrid')
 
 
@@ -164,9 +166,14 @@ def centralAPI(algorithm, dataset, amount_clusters):
         data = preprocess_example_data(datapath)
     elif dataset == "iris":
         data = load_iris()["data"]
-        print(type())
+
     elif dataset == "breast_cancer":
         data = load_breast_cancer()["data"]
+    elif dataset == "digits":
+        digits = load_digits()
+        # reduce dimensionality to make appropraite plots
+        pca = PCA(n_components=2)
+        data = pca.fit_transform(digits.data)
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
@@ -195,8 +202,13 @@ def centralAPI(algorithm, dataset, amount_clusters):
 # Choose from "kmeans", "Affinity Propagation", "BIRCH"
 algorithm = "BIRCH"
 
-# Choose from "example", "iris", "beast_cancer"
-dataset = "breast_cancer"  # from machine learning 2
+# Choose from "example", "iris", beast_cancer
+dataset = "iris"  # from machine learning 2
+dataset_2 = "digits"
 clusters = 5
 
-centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
+# Auskommentieren, was man nicht ausführen möchte
+
+# centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
+centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=clusters)
+

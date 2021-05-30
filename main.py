@@ -65,7 +65,7 @@ def kmeans(data, amount_clusters):
         array that assigns each datapoint to a cluster"""
 
     # Fit data to kmeans model class
-    kmeans = KMeans(amount_clusters=amount_clusters, random_state=0).fit(data)
+    kmeans = KMeans(n_clusters=amount_clusters, random_state=0).fit(data)
 
     # retrieve cluster centers and class labels to data
     centers = kmeans.cluster_centers_
@@ -188,23 +188,25 @@ def centralAPI(algorithm, dataset, amount_clusters):
     if dataset == "example":
         datapath = "./example_data.txt"
         data = preprocess_example_data(datapath)
+
     elif dataset == "IRIS":
-        data = load_iris()["data"]
-        target_labels = load_iris().targets
+        data_obj = load_iris()
+
     elif dataset == "digits":
-        digits = load_digits()
-        data = digits.data
-        target_labels = digits.target
-        # reduce dimensionality to make appropraite plots - if wanted
-        # pca = PCA(n_components=2)
-        # data = pca.fit_transform(digits.data)
+        data_obj = load_digits()
+
     elif dataset == "breast_cancer":
-        data = load_breast_cancer()["data"]
+        data_obj = load_breast_cancer()
+
     elif dataset == "wine":
-        data = load_wine().data
+        data_obj = load_wine()
+
     else:
         # TODO: Add new datasets and connect them elif statements
         pass
+
+    data = data_obj.data
+    target_labels = data_obj.target
 
     # Select Algorithm
     if algorithm == "K-Means":
@@ -228,14 +230,15 @@ def centralAPI(algorithm, dataset, amount_clusters):
     purity(labels, target_labels)
 
     # Plot the data
-    # PCS after kmeans leads to higher purity
+    # Use PCA to enable plotting high dimensional data in 2d
     pca = PCA(n_components=2)
-    data = pca.fit_transform(digits.data)
+    data = pca.fit_transform(data)
+
     # One plot with calculated labels and one with true labels to compare
-    plotting(data, centers, labels)
-    plotting(data, centers, target_labels)
+    #plotting(data, centers, labels)
+    #plotting(data, centers, target_labels)
   
-    return data, centers, labels
+    #return data, centers, labels
     
 
 def purity(labels, targets):
@@ -246,7 +249,7 @@ def purity(labels, targets):
     data: str (?)
         calculated data from the algorithms
     labels: str (?)
-        target labels to ccompute purity
+        target labels to compute purity
     amount: int
         number of clusters for k-means
     """
@@ -255,8 +258,9 @@ def purity(labels, targets):
     # Purity without PCA yields to better results
     # pca = PCA(n_components=2)
     # data = pca.fit_transform(data)
+
+    # calculate amount of clusters
     amount = len(set(labels))
-    #_, predicted = kmeans(data, amount)
 
     # Calculate confusion Matrix which shows which points are in each cluster 
     # (predicted and should be)
@@ -283,19 +287,12 @@ def purity(labels, targets):
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-
-# Choose from "kmeans", "Affinity Propagation", "BIRCH"
-algorithm = "BIRCH"
-
 # Choose from "example", "iris", beast_cancer
-dataset = "iris"  # from machine learning 2
-dataset_2 = "digits"
+datasets = ["IRIS", "wine", "digits", "breast_cancer"]
 
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte
 
-# centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
-
-centralAPI(algorithm="K-Means", dataset=dataset_2, amount_clusters=10)
-# purity("kmeans", "")
+algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
+centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=10)

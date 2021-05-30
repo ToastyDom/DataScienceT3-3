@@ -160,31 +160,37 @@ def centralAPI(algorithm, dataset, amount_clusters):
         pass
 
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
-    # Plot the data
+    
+    # Calculate purity before plotting 
+    purity(data, target_label, amount_clusters)
 
+    # Plot the data
     # PCS after kmeans leads to higher purity
     pca = PCA(n_components=2)
     data = pca.fit_transform(digits.data)
     # One plot with calculated labels and one with true labels to compare
     plotting(data, centers, labels)
     plotting(data, centers, target_label)
+    
 
-def purity(algorithm, dataset):
+def purity(data, labels, amount):
     """"Central function that calculates the external validation factor, done with "Purity"
 
     Parameters
     ______
-    algorithm: str
-        name of clustering algorithm
-    dataset: str
-        name of dataset
+    data: str (?)
+        calculated data from the algorithms
+    labels: str (?)
+        target labels to ccompute purity
+    amount: int
+        number of clusters for k-means
     """
     # We need to run another round of PCA should be handled through return of centralAPI 
-    data, labels = load_digits(return_X_y=True)
+    # data, labels = load_digits(return_X_y=True)
     # Purity without PCA yields to better results
     # pca = PCA(n_components=2)
     # data = pca.fit_transform(data)
-    _, predicted = kmeans(data, 10)
+    _, predicted = kmeans(data, amount)
 
     # Calculate confusion Matrix which shows which points are in each cluster 
     # (predicted and should be)
@@ -196,12 +202,12 @@ def purity(algorithm, dataset):
 
     # Calculate which predicted label matches to the true label
     # e.g. predicted label 1 is true label 9 if [_,9,_,...]
-    mapping = np.array([np.argmax(mat[:,i]) for i in range(10)])
-    mapping_norm = np.array([np.argmax(mat_norm[:,i]) for i in range(10)])
+    mapping = np.array([np.argmax(mat[:,i]) for i in range(amount)])
+    mapping_norm = np.array([np.argmax(mat_norm[:,i]) for i in range(amount)])
     
     # Calculate Purity 
     purity_value = 0
-    for i in range(10):
+    for i in range(amount):
         # mapping_norm[i] gives true label and i gives what was predicted
         purity_value += mat_norm[mapping_norm[i],i]
     print("Purity is: ", purity_value)
@@ -223,4 +229,4 @@ clusters = 5
 
 # centralAPI(algorithm=algorithm, dataset=dataset, amount_clusters=clusters)
 centralAPI(algorithm="kmeans", dataset=dataset_2, amount_clusters=10)
-purity("kmeans", "")
+# purity("kmeans", "")

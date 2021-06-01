@@ -288,12 +288,12 @@ def purity(labels, targets):
 
 """Die algorithmen hier unten funktionieren bereits"""
 
-# Choose from "example", "iris", beast_cancer
+# Choose from datasets and algorithms
 datasets = ["IRIS", "wine", "digits", "breast_cancer"]
+algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
 
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte
 
-algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
-centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=10)
+centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=clusters)

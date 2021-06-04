@@ -46,14 +46,14 @@ if sel_algorithm == "K-Means":
         st.write("Enter integer above 1")
 
 # select evaluation algorithm
-sel_evaluaton = st.selectbox('Which evaluation would you like to compute?',
-                      ('Purity', '???', '???'))
+#sel_evaluaton = st.selectbox('Which evaluation would you like to compute?',
+#                      ('Purity', '???', '???'))
 
 # Setup summary
 st.write('**Current setup:**')
 st.write('Dataset:', sel_dataset)
 st.write('Algorithm:', sel_algorithm)
-st.write('Evaluation:', sel_evaluaton)
+st.write('Evaluation:', "Purity")
 
 
 

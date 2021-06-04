@@ -167,7 +167,7 @@ def plotting(data, centers, labels):
     # Ploting the data
     plt.scatter(data[:, 0], data[:, 1], c=labels,
                 s=50, cmap='prism')
-    plt.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
+    #plt.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
     plt.show()
 
 
@@ -198,7 +198,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     elif dataset == "breast_cancer":
         data_obj = load_breast_cancer()
 
-    elif dataset == "wine":
+    elif dataset == "Wine":
         data_obj = load_wine()
 
     else:
@@ -239,7 +239,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     #plotting(data, centers, labels)
     #plotting(data, centers, target_labels)
   
-    #return data, centers, labels
+    return data, centers, labels
     
 
 def purity(labels, targets):
@@ -289,7 +289,7 @@ def purity(labels, targets):
 """Die algorithmen hier unten funktionieren bereits"""
 
 # Choose from "example", "iris", beast_cancer
-datasets = ["IRIS", "wine", "digits", "breast_cancer"]
+datasets = ["IRIS", "Wine", "digits", "breast_cancer"]
 
 clusters = 5
 

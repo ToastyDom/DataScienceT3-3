@@ -67,13 +67,12 @@ if st.button('Evaluate'):
 
     # Todo: Vielleicht sollten wir bei der central API als return die plots haben damit die hier direkt
     # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
-    st.write('Computing...')
     
     # Need Figure for st.pyplot
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], c=labels,
                 s=50, cmap='prism')
-    ax.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
+    #ax.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
     st.pyplot(fig)
     
 

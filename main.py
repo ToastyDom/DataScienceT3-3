@@ -151,7 +151,7 @@ def birch(data, amount_clusters):
 
 
 
-def plotting(data, centers, labels):
+def plotting(data, labels):
 
     """Central plotting function that takes in all the relevant data to plot something
 
@@ -216,7 +216,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
         centers, labels = affinity(data)
 
     elif algorithm == "Gaussian mixture model":
-        gmm, labels = gaussian_mixture_model(data, amount_clusters=amount_clusters)
+        data, gmm, labels = gaussian_mixture_model(data, amount_clusters=amount_clusters)
 
     elif algorithm == "BIRCH":
         centers, labels = birch(data, amount_clusters=amount_clusters)
@@ -237,10 +237,10 @@ def centralAPI(algorithm, dataset, amount_clusters):
     data = pca.fit_transform(data)
 
     # One plot with calculated labels and one with true labels to compare
-    #plotting(data, centers, labels)
+    plotting(data, labels)
     #plotting(data, centers, target_labels)
   
-    return data, centers, labels
+    return data, labels
     
 
 def purity(labels, targets):
@@ -297,4 +297,10 @@ clusters = 5
 # Auskommentieren, was man nicht ausführen möchte
 
 algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
-#centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=10)
+centralAPI(algorithm=algorithms[1], dataset=datasets[0], amount_clusters=3)
+"""
+for i in range(4):
+    for j in range(4):
+        print(algorithms[i], " ", datasets[j])
+        centralAPI(algorithm=algorithms[i], dataset=datasets[j], amount_clusters=3)
+"""

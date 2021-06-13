@@ -32,10 +32,10 @@ sel_dataset = st.selectbox('Which dataset would you like to test?',
 
 # select algorithm
 sel_algorithm = st.selectbox('Which algorithm would you like to test?',
-                      ('K-Means', 'Affinity Propagation', '???'))
+                      ('K-Means', 'Affinity Propagation', 'Gaussian mixture model', '???'))
 
 # select amount of clusters if applicable
-if sel_algorithm == "K-Means":
+if (sel_algorithm == "K-Means") or (sel_algorithm == "Gaussian mixture model"):
     cluster_amount = True
     sel_amount_cluster = st.text_input("Enter amount of clusters", 2)
     try:

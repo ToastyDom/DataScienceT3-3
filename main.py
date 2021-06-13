@@ -123,11 +123,11 @@ def gaussian_mixture_model(data, amount_clusters):
     # predict clusters for data
     labels = gmm.predict(data)
 
-    return gmm, labels
+    return data, False, labels
 
-  
-  
-  
+
+
+
 def birch(data, amount_clusters):
     """Birch implementation. 
     amount_clusters: int
@@ -211,6 +211,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # Select Algorithm
     if algorithm == "K-Means":
         centers, labels = kmeans(data, amount_clusters=amount_clusters)
+
     elif algorithm == "Affinity Propagation":
         centers, labels = affinity(data)
 
@@ -273,8 +274,8 @@ def purity(labels, targets):
 
     # Calculate which predicted label matches to the true label
     # e.g. predicted label 1 is true label 9 if [_,9,_,...]
-    mapping = np.array([np.argmax(mat[:,i]) for i in range(amount)])
-    mapping_norm = np.array([np.argmax(mat_norm[:,i]) for i in range(amount)])
+    mapping = np.array([np.argmax(mat[:, i]) for i in range(amount)])
+    mapping_norm = np.array([np.argmax(mat_norm[:, i]) for i in range(amount)])
     
     # Calculate Purity 
     purity_value = 0
@@ -296,4 +297,4 @@ clusters = 5
 # Auskommentieren, was man nicht ausführen möchte
 
 algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
-centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=10)
+#centralAPI(algorithm=algorithms[0], dataset=datasets[0], amount_clusters=10)

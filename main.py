@@ -229,7 +229,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     # TODO: Guckt dass eure Algorithmen immer "centers" und "labels" returnen
     
     # Calculate purity before plotting 
-    purity(labels, target_labels)
+    pur_val = purity(labels, target_labels)
 
     # Plot the data
     # Use PCA to enable plotting high dimensional data in 2d
@@ -240,7 +240,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     plotting(data, labels)
     #plotting(data, centers, target_labels)
   
-    return data, labels
+    return data, labels, pur_val
     
 
 def purity(labels, targets):
@@ -283,6 +283,7 @@ def purity(labels, targets):
         # mapping_norm[i] gives true label and i gives what was predicted
         purity_value += mat_norm[mapping_norm[i],i]
     print("Purity is: ", purity_value)
+    return purity_value
 
 # Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
 #  unser Webinterface

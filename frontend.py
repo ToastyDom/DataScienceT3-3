@@ -28,14 +28,15 @@ st.title("Setup Evaluation")
 
 # select dataset
 sel_dataset = st.selectbox('Which dataset would you like to test?',
-                      ('IRIS', 'Wine', '???'))
+                      ("IRIS", "Wine", "digits", "breast_cancer"))
 
 # select algorithm
 sel_algorithm = st.selectbox('Which algorithm would you like to test?',
-                      ('K-Means', 'Affinity Propagation', 'Gaussian mixture model', '???'))
+                      ("K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"))
 
 # select amount of clusters if applicable
-if (sel_algorithm == "K-Means") or (sel_algorithm == "Gaussian mixture model"):
+if (sel_algorithm == "K-Means") or (sel_algorithm == "Gaussian mixture model")\
+    or (sel_algorithm == "BIRCH"):
     cluster_amount = True
     sel_amount_cluster = st.text_input("Enter amount of clusters", 2)
     try:
@@ -61,9 +62,9 @@ st.write('Evaluation:', "Purity")
 # Pressed button returns "True"
 if st.button('Evaluate'):
     if cluster_amount:
-        data, centers, labels = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
+        data, labels, purity_val = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
     else:
-        data, centers, labels = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
+        data, labels, purity_val = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
 
     # Todo: Vielleicht sollten wir bei der central API als return die plots haben damit die hier direkt
     # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
@@ -75,4 +76,6 @@ if st.button('Evaluate'):
     #ax.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
     st.pyplot(fig)
     
+    st.write("The purity value of ", sel_algorithm, " on ", \
+             "'" + sel_dataset + "'", " is: ", purity_val)
 

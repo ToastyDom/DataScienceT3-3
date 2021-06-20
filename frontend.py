@@ -62,19 +62,41 @@ st.write('Evaluation:', "Purity")
 # Pressed button returns "True"
 if st.button('Evaluate'):
     if cluster_amount:
-        data, labels, purity_val = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
+        data, labels, purity_val, tar_labels = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
     else:
-        data, labels, purity_val = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
+        data, labels, purity_val, tar_labels = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
 
     # Todo: Vielleicht sollten wir bei der central API als return die plots haben damit die hier direkt
     # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
     
     # Need Figure for st.pyplot
-    fig, ax = plt.subplots()
-    ax.scatter(data[:, 0], data[:, 1], c=labels,
+    """
+    # Side by Side Version
+    fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
+    ax1.set_title("Label predictions by algorithm")
+    ax2.set_title("Original labels of data set")
+    ax1.scatter(data[:, 0], data[:, 1], c=labels,
                 s=50, cmap='prism')
-    #ax.scatter(centers[:, 0], centers[:, 1], marker="+", color='blue')
+    ax2.scatter(data[:, 0], data[:, 1], c=tar_labels,
+                s=50, cmap='prism')
     st.pyplot(fig)
+    # Side by Side Version End
+    """
+    
+    
+    # Below Version Start
+    figb, axb = plt.subplots()
+    axb.scatter(data[:, 0], data[:, 1], c=tar_labels,
+                s=50, cmap='prism')
+    axb.set_title("Original labels of data set")
+    st.pyplot(figb)
+    
+    fig, ax = plt.subplots()
+    axb.scatter(data[:, 0], data[:, 1], c=labels,
+                s=50, cmap='prism') 
+    axb.set_title("Label predictions by algorithm")
+    st.pyplot(figb)
+    # Below Version End
     
     st.write("The purity value of ", sel_algorithm, " on ", \
              "'" + sel_dataset + "'", " is: ", purity_val)

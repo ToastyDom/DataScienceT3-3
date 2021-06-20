@@ -240,7 +240,7 @@ def centralAPI(algorithm, dataset, amount_clusters):
     plotting(data, labels)
     #plotting(data, centers, target_labels)
   
-    return data, labels, pur_val
+    return data, labels, pur_val, target_labels
     
 
 def purity(labels, targets):
@@ -292,16 +292,16 @@ def purity(labels, targets):
 
 # Choose from "example", "iris", beast_cancer
 datasets = ["IRIS", "Wine", "digits", "breast_cancer"]
-
+nr_clusters = [3,3,10,2]
 clusters = 5
 
 # Auskommentieren, was man nicht ausführen möchte
 
 algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
-centralAPI(algorithm=algorithms[1], dataset=datasets[0], amount_clusters=3)
-"""
+
+#centralAPI(algorithm=algorithms[1], dataset=datasets[0], amount_clusters=3)
+
 for i in range(4):
     for j in range(4):
         print(algorithms[i], " ", datasets[j])
-        centralAPI(algorithm=algorithms[i], dataset=datasets[j], amount_clusters=3)
-"""
+        centralAPI(algorithm=algorithms[i], dataset=datasets[j], amount_clusters=nr_clusters[j])

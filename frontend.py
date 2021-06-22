@@ -28,7 +28,7 @@ st.title("Setup Evaluation")
 
 # select dataset
 sel_dataset = st.selectbox('Which dataset would you like to test?',
-                      ("IRIS", "Wine", "digits", "breast_cancer"))
+                      ("IRIS", "Wine", "Digits", "Breast Cancer"))
 
 # select algorithm
 sel_algorithm = st.selectbox('Which algorithm would you like to test?',
@@ -38,7 +38,14 @@ sel_algorithm = st.selectbox('Which algorithm would you like to test?',
 if (sel_algorithm == "K-Means") or (sel_algorithm == "Gaussian mixture model")\
     or (sel_algorithm == "BIRCH"):
     cluster_amount = True
-    sel_amount_cluster = st.text_input("Enter amount of clusters", 2)
+    if sel_dataset == "IRIS":
+        sel_amount_cluster = st.text_input("Enter amount of clusters", 3)
+    elif sel_dataset == "Wine":
+        sel_amount_cluster = st.text_input("Enter amount of clusters", 3)
+    elif sel_dataset == "Digits":
+        sel_amount_cluster = st.text_input("Enter amount of clusters", 10)
+    else:
+        sel_amount_cluster = st.text_input("Enter amount of clusters", 2)
     try:
         sel_amount_cluster = int(sel_amount_cluster)
         if sel_amount_cluster < 2:
@@ -70,6 +77,7 @@ if st.button('Evaluate'):
     # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
     
     # Need Figure for st.pyplot
+
     """
     # Side by Side Version
     fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
@@ -97,6 +105,7 @@ if st.button('Evaluate'):
     axb.set_title("Label predictions by algorithm")
     st.pyplot(figb)
     # Below Version End
+
     
     st.write("The purity value of ", sel_algorithm, " on ", \
              "'" + sel_dataset + "'", " is: ", purity_val)

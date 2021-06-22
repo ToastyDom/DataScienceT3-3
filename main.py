@@ -192,10 +192,10 @@ def centralAPI(algorithm, dataset, amount_clusters):
     elif dataset == "IRIS":
         data_obj = load_iris()
 
-    elif dataset == "digits":
+    elif dataset == "Digits":
         data_obj = load_digits()
 
-    elif dataset == "breast_cancer":
+    elif dataset == "Breast Cancer":
         data_obj = load_breast_cancer()
 
     elif dataset == "Wine":
@@ -281,7 +281,7 @@ def purity(labels, targets):
 """Die algorithmen hier unten funktionieren bereits"""
 
 # Choose from "example", "iris", beast_cancer
-datasets = ["IRIS", "Wine", "digits", "breast_cancer"]
+datasets = ["IRIS", "Wine", "Digits", "Breast_cancer"]
 nr_clusters = [3,3,10,2]
 clusters = 5
 
@@ -291,7 +291,9 @@ algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRC
 
 #centralAPI(algorithm=algorithms[1], dataset=datasets[0], amount_clusters=3)
 
+"""
 for i in range(4):
     for j in range(4):
         print(algorithms[i], " ", datasets[j])
         centralAPI(algorithm=algorithms[i], dataset=datasets[j], amount_clusters=nr_clusters[j])
+"""

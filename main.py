@@ -248,33 +248,23 @@ def purity(labels, targets):
 
     Parameters
     ______
-    data: str (?)
-        calculated data from the algorithms
-    labels: str (?)
-        target labels to compute purity
-    amount: int
-        number of clusters for k-means
+    labels:
+        predicted labels calculated by k-means
+    targets: 
+        target labels provided by the dataset
     """
-    # We need to run another round of PCA should be handled through return of centralAPI 
-    # data, labels = load_digits(return_X_y=True)
-    # Purity without PCA yields to better results
-    # pca = PCA(n_components=2)
-    # data = pca.fit_transform(data)
 
     # calculate amount of clusters
     amount = len(set(labels))
 
     # Calculate confusion Matrix which shows which points are in each cluster 
     # (predicted and should be)
-    mat = confusion_matrix(targets, labels)
-
     # normalizing over all clusters, therefore we do not need to multiply with 1/N
     # mat_norm is a matrix with i-th row = true label and j-th column = predicted label
     mat_norm = confusion_matrix(targets, labels, normalize='all')
 
     # Calculate which predicted label matches to the true label
     # e.g. predicted label 1 is true label 9 if [_,9,_,...]
-    mapping = np.array([np.argmax(mat[:, i]) for i in range(amount)])
     mapping_norm = np.array([np.argmax(mat_norm[:, i]) for i in range(amount)])
     
     # Calculate Purity 

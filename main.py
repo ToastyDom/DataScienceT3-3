@@ -181,8 +181,8 @@ def centralAPI(algorithm, dataset, amount_clusters):
         name of the cluster algorithm
     dataset: str
         name of dataset
-    kwargs: xxx
-        arguments that might depend on the clustering algorithm"""
+    amount_clusters: int
+        amount of clusters that will be used e.g for k-means"""
 
     # Select and load dataset
     if dataset == "example":
@@ -275,22 +275,17 @@ def purity(labels, targets):
     print("Purity is: ", purity_value)
     return purity_value
 
-# Todo: Das müssen wir am Ende besser steuern. Das was wir hier aktuell eingeben wird später
-#  unser Webinterface
-
-"""Die algorithmen hier unten funktionieren bereits"""
-
 # Choose from "example", "iris", beast_cancer
 datasets = ["IRIS", "Wine", "Digits", "Breast_cancer"]
 nr_clusters = [3,3,10,2]
 clusters = 5
 
-# Auskommentieren, was man nicht ausführen möchte
-
 algorithms = ["K-Means", "Affinity Propagation", "Gaussian mixture model", "BIRCH"]
 
+# For testinf purposes, frontend does not need this
 #centralAPI(algorithm=algorithms[1], dataset=datasets[0], amount_clusters=3)
 
+# Code for the plots we used in the paper
 """
 for i in range(4):
     for j in range(4):

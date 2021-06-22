@@ -72,13 +72,8 @@ if st.button('Evaluate'):
         data, labels, purity_val, tar_labels = centralAPI(sel_algorithm, sel_dataset, sel_amount_cluster)
     else:
         data, labels, purity_val, tar_labels = centralAPI(sel_algorithm, sel_dataset, amount_clusters=None)
-
-    # Todo: Vielleicht sollten wir bei der central API als return die plots haben damit die hier direkt
-    # Todo: zu erreichen sind. Diese dann auf dem Bildschrim darstellen und dann passt das denke ich!
     
-    # Need Figure for st.pyplot
 
-    
     # Side by Side Version
     #fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
     #ax1.set_title("Label predictions by algorithm")
@@ -89,8 +84,6 @@ if st.button('Evaluate'):
     #            s=50, cmap='prism')
     #st.pyplot(fig)
     # Side by Side Version End
-    
-    
     
     # Below Version Start
     figb, axb = plt.subplots()

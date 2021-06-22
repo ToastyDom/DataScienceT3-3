@@ -78,18 +78,18 @@ if st.button('Evaluate'):
     
     # Need Figure for st.pyplot
 
-    """
+    
     # Side by Side Version
-    fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
-    ax1.set_title("Label predictions by algorithm")
-    ax2.set_title("Original labels of data set")
-    ax1.scatter(data[:, 0], data[:, 1], c=labels,
-                s=50, cmap='prism')
-    ax2.scatter(data[:, 0], data[:, 1], c=tar_labels,
-                s=50, cmap='prism')
-    st.pyplot(fig)
+    #fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
+    #ax1.set_title("Label predictions by algorithm")
+    #ax2.set_title("Original labels of data set")
+    #ax1.scatter(data[:, 0], data[:, 1], c=labels,
+    #            s=50, cmap='prism')
+    #ax2.scatter(data[:, 0], data[:, 1], c=tar_labels,
+    #            s=50, cmap='prism')
+    #st.pyplot(fig)
     # Side by Side Version End
-    """
+    
     
     
     # Below Version Start
